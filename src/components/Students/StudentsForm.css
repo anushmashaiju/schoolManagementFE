@@ -1,0 +1,53 @@
+
+  /* Student table styles */
+  
+  .student-form-card {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color:#5f6164;
+    max-width: 600px;
+    margin: 50px auto; /* Center the form */
+  }
+  
+  .student-form-card h3 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .student-form-card form {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two equal columns */
+    gap: 15px; /* Gap between columns and rows */
+  }
+  
+  .student-form-card form div {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .student-form-card label {
+    margin-bottom: 5px;
+  }
+  
+  .student-form-card input {
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+  
+  .student-form-card button {
+    grid-column: 1 / -1; /* Span across both columns */
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .student-form-card button:hover {
+    background-color: #0056b3;
+  }
+  

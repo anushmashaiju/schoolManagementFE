@@ -1,0 +1,23 @@
+/* Container Styles */
+.container {
+    max-width: 100%; /* Set a maximum width for the container */
+    margin: auto; /* Center the container */
+}
+
+/* Fees Table Styles */
+.fees-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.fees-table th,
+.fees-table td {
+    border: 1px solid #ddd; /* Light gray border */
+    padding: 0.75rem; /* Cell padding */
+    text-align: left; /* Align text to the left */
+}
+
+.fees-table th {
+    background-color: #5f6164; /* Light gray background for header */
+}

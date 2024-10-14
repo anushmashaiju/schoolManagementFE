@@ -1,0 +1,80 @@
+/* signUp.css */
+.form-container {
+    max-width: 400px;
+    margin: 40px auto; /* Center the form and add top margin */
+    padding: 20px; /* Add padding to the form */
+    border-radius: 8px;
+    background-color: #2c2c2c; /* Darker background for contrast */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Slightly stronger shadow for emphasis */
+  }
+  
+  .form-container h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 28px; /* Slightly larger font for the heading */
+    color: #ffffff;
+  }
+  
+  .form-container input {
+    width:94%; /* Use full width for better spacing */
+    padding: 12px; /* Increase padding for input fields */
+    margin-bottom: 20px; /* More space between input fields */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: #3a3a3a; /* Slightly darker input background */
+    color: white;
+  }
+  
+  .form-container input::placeholder {
+    color: #bbb; /* Light placeholder text */
+  }
+  
+  .form-container button {
+    width: 100%; /* Button spans full width */
+    padding: 12px; /* Increase padding */
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth hover transition */
+  }
+  
+  .form-container button:hover {
+    background-color: #0056b3;
+  }
+  
+  .form-container p {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+    color: #ccc;
+  }
+  
+  .form-container span {
+    cursor: pointer;
+    color: #00aced; /* Brighter blue for visibility */
+    font-weight: bold;
+  }
+  
+  .form-container span:hover {
+    text-decoration: underline; /* Underline on hover for better UX */
+  }
+  
+  /* Media Queries for responsiveness */
+  @media (max-width: 768px) {
+    .form-container {
+      max-width: 90%;
+    }
+  
+    .form-container button {
+      padding: 10px;
+    }
+  
+    .form-container input {
+      padding: 10px;
+    }
+  }
+  
