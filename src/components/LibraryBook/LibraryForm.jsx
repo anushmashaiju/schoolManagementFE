@@ -1,35 +1,35 @@
-import { useState } from 'react'
-import './LibraryForm.css'
+import { useState } from 'react';
+import './LibraryForm.css';
 
 function LibraryForm() {
     const [bookHistory, setBookHistory] = useState([
         {
             id: 1, studentName: 'John Doe', class: '10th', admissionNo: 'A101',
             bookId: 'B001', bookName: 'To Kill a Mockingbird', authorName: 'Harper Lee',
-            borrowDate: '2024-09-01', returnDate: '2024-09-15'
+            borrowDate: '2024-09-01', returnDate: '2024-09-15', status: 'Returned'
         },
         {
             id: 2, studentName: 'Jane Smith', class: '11th', admissionNo: 'A102',
             bookId: 'B002', bookName: '1984', authorName: 'George Orwell',
-            borrowDate: '2024-09-10', returnDate: '2024-09-25'
+            borrowDate: '2024-09-10', returnDate: '2024-09-25', status: 'Borrowed'
         },
         {
             id: 3, studentName: 'Michael Johnson', class: '12th', admissionNo: 'A103',
             bookId: 'B003', bookName: 'The Great Gatsby', authorName: 'F. Scott Fitzgerald',
-            borrowDate: '2024-09-12', returnDate: '2024-09-26'
+            borrowDate: '2024-09-12', returnDate: '2024-09-26', status: 'Borrowed'
         },
     ]);
+
     const [newBook, setNewBook] = useState({
+        admissionNo: '',
         studentName: '',
         class: '',
-        admissionNo: '',
         bookId: '',
         bookName: '',
-        autherName: '',
+        authorName: '',
         borrowDate: '',
         returnDate: ''
     });
-
 
     const handleBookChange = (e) => {
         const { name, value } = e.target;
@@ -38,24 +38,31 @@ function LibraryForm() {
 
     const handleBookSubmit = (e) => {
         e.preventDefault();
+        const today = new Date();
+        const returnDate = new Date(newBook.returnDate);
+        const status = returnDate > today ? 'Borrowed' : 'Returned';
+
         const newBookEntry = {
+            id: bookHistory.length + 1,
+            admissionNo: newBook.admissionNo,
             studentName: newBook.studentName,
             class: newBook.class,
-            admissionNo: newBook.admissionNo,
-            BookId: newBook.bookId,
-            BookName: newBook.bookName,
-            AutherName: newBook.autherName,
-            BorrowDate: newBook.borrowDate,
-            ReturnDate: newBook.returnDate,
+            bookId: newBook.bookId,
+            bookName: newBook.bookName,
+            authorName: newBook.authorName,
+            borrowDate: newBook.borrowDate,
+            returnDate: newBook.returnDate,
+            status: status,
         };
+
         setBookHistory((prev) => [...prev, newBookEntry]);
         setNewBook({
+            admissionNo: '',
             studentName: '',
             class: '',
-            admissionNo: '',
             bookId: '',
             bookName: '',
-            autherName: '',
+            authorName: '',
             borrowDate: '',
             returnDate: ''
         }); // Reset form
@@ -68,48 +75,45 @@ function LibraryForm() {
                 <h3>Add Book Details</h3>
                 <form onSubmit={handleBookSubmit}>
                     <div>
-                        <label>Name of Student:</label>
-                        <input
-                            type="text"
-                            name="studentName" // Corrected the name to match state
-                            value={newBook.studentName}
-                            onChange={handleBookChange}
-                            required
-                        />
-                        </div>
-                        <div>
-                            <label>Class:</label>
-                            <input
-                                type="text"
-                                name="class"
-                                value={newBook.class}
-                                onChange={handleBookChange}
-                                required
-                            />
-                        </div>
-            
-
-                    <div>
                         <label>Admission No:</label>
                         <input
                             type="text"
-                            name="admissionNo" // Corrected the name to match state
+                            name="admissionNo"
                             value={newBook.admissionNo}
                             onChange={handleBookChange}
                             required
                         />
-                        </div>
-                        <div>
-                            <label>Book Id:</label>
-                            <input
-                                type="text"
-                                name="bookId"
-                                value={newBook.bookId}
-                                onChange={handleBookChange}
-                                required
-                            />
-                        </div>
-
+                    </div>
+                    <div>
+                        <label>Name of Student:</label>
+                        <input
+                            type="text"
+                            name="studentName"
+                            value={newBook.studentName}
+                            onChange={handleBookChange}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label>Class:</label>
+                        <input
+                            type="text"
+                            name="class"
+                            value={newBook.class}
+                            onChange={handleBookChange}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label>Book Id:</label>
+                        <input
+                            type="text"
+                            name="bookId"
+                            value={newBook.bookId}
+                            onChange={handleBookChange}
+                            required
+                        />
+                    </div>
                     <div>
                         <label>Book Name:</label>
                         <input
@@ -121,11 +125,11 @@ function LibraryForm() {
                         />
                     </div>
                     <div>
-                        <label>Auther Name:</label>
+                        <label>Author Name:</label>
                         <input
                             type="text"
-                            name="autherName"
-                            value={newBook.autherName}
+                            name="authorName"
+                            value={newBook.authorName}
                             onChange={handleBookChange}
                             required
                         />
@@ -150,13 +154,11 @@ function LibraryForm() {
                             required
                         />
                     </div>
-
                     <button type="submit">Submit</button>
-                </form >
-            </div >
-
+                </form>
+            </div>
         </div>
-    )
+    );
 }
 
-export default LibraryForm
+export default LibraryForm;

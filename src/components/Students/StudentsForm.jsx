@@ -3,10 +3,12 @@ import './StudentsForm.css'
 
 function StudentsForm() {
     const [studentDetails, setStudentDetails] = useState({
-        name: '',
+      admissionNo: '',
+      studentName: '',
         class: '',
-        admissionNo: '',
+       dateOfBirth:'',
         parentsName: '',
+        contactNo: '',
         place: '',
         dateOfJoining: ''
       });
@@ -27,10 +29,12 @@ function StudentsForm() {
         console.log('New Student Details:', studentDetails);
         // Add logic to save the student details
         setStudentDetails({
-          name: '',
-          class: '',
           admissionNo: '',
+          studentName: '',
+          class: '',
+          dateOfBirth:'',
           parentsName: '',
+          contactNo: '',
           place: '',
           dateOfJoining: ''
         });
@@ -40,14 +44,24 @@ function StudentsForm() {
     <div>
        {/* Add Details Form */}
        <div className="student-form-card">
-          <h3>Add New Student</h3>
+          <h3>Add New Student Details</h3>
           <form onSubmit={handleFormSubmit}>
+          <div>
+              <label>Admission No:</label>
+              <input
+                type="text"
+                name="admissionNo"
+                value={studentDetails.admissionNo}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
             <div>
               <label>Name of Student:</label>
               <input
                 type="text"
                 name="name"
-                value={studentDetails.name}
+                value={studentDetails.studentName}
                 onChange={handleInputChange}
                 required
               />
@@ -63,11 +77,11 @@ function StudentsForm() {
               />
             </div>
             <div>
-              <label>Admission No:</label>
+              <label>Date of Birth</label>
               <input
-                type="text"
-                name="admissionNo"
-                value={studentDetails.admissionNo}
+                type="date"
+                name="dateOfBirth"
+                value={studentDetails.dateOfBirth}
                 onChange={handleInputChange}
                 required
               />
@@ -78,6 +92,16 @@ function StudentsForm() {
                 type="text"
                 name="parentsName"
                 value={studentDetails.parentsName}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div>
+              <label>Contact No:</label>
+              <input
+                type="number"
+                name="contactNo"
+                value={studentDetails.contactNo}
                 onChange={handleInputChange}
                 required
               />

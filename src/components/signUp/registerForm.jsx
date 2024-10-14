@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { useNavigate } from 'react-router-dom';  // Add useNavigate for navigation
 import './signUp.css';
 
 const RegisterForm = ({ setBoxName }) => {
+  const [schoolName, setSchoolName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -17,6 +18,7 @@ const RegisterForm = ({ setBoxName }) => {
     }
 
     // Assume registration is successful
+    console.log("Shool name:", schoolName);
     console.log("Email:", email);
     console.log("Password:", password);
     console.log("Confirm Password:", confirmPassword);
@@ -29,6 +31,14 @@ const RegisterForm = ({ setBoxName }) => {
     <form className="form-container" onSubmit={handleSubmit}>
       <h2>Register</h2>
 
+      <input 
+        type="text" 
+        name="name" 
+        placeholder="School name" 
+        value={schoolName} 
+        onChange={(e) => setSchoolName(e.target.value)} 
+        required 
+      />
       <input 
         type="email" 
         name="email" 

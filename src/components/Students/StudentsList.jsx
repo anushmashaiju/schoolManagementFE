@@ -6,12 +6,11 @@ import { IoChevronBackOutline } from "react-icons/io5";
 function StudentsList() {
   const navigate = useNavigate(); // Initialize useNavigate
   const [studentsDetails, setStudentsDetails] = useState([
-    { id: 1, studentName: 'John Doe', class: '10th', admissionNo: 'A101', parentName: 'Sabu', place: 'kozhikode', joiningDate: '2023-08-01' },
-    { id: 2, studentName: 'Jane Smith', class: '11th', admissionNo: 'A102', parentName: 'Alex', place: 'feroke', joiningDate: '2023-08-15' },
-    { id: 3, studentName: 'Michael Johnson', class: '12th', admissionNo: 'A103', parentName: 'Lijo', place: 'kallai', joiningDate: '2023-09-05' },
+    { id: 1, admissionNo: 'A101',studentName: 'John Doe', class: '10th',DateOfBirth: '2008-06-05' , parentName: 'Sabu', place: 'kozhikode', contactNo:'9876642532',joiningDate: '2023-08-01' },
+    { id: 2, admissionNo: 'A102',studentName: 'Jane Smith', class: '11th',DateOfBirth: '2007-03-01',  parentName: 'Alex', place: 'feroke',contactNo:'9876642532', joiningDate: '2023-08-15' },
+    { id: 3,admissionNo: 'A103', studentName: 'Michael Johnson', class: '12th',DateOfBirth: '2006-02-01',  parentName: 'Lijo', place: 'kallai',contactNo:'9872664532', joiningDate: '2023-09-05' },
   ]);
   return (
-
     <div>
 
       {/* Student Records Table */}
@@ -24,10 +23,12 @@ function StudentsList() {
         <table className="student-table">
           <thead>
             <tr>
+            <th>Admission No</th>
               <th>Student Name</th>
               <th>Class</th>
-              <th>Admission No</th>
+              <th>Date of Birth</th>
               <th>Parent Name</th>
+              <th>Contact No</th>
               <th>Place</th>
               <th>Date of Joining</th>
             </tr>
@@ -35,12 +36,14 @@ function StudentsList() {
           <tbody>
             {studentsDetails.map(student => (
               <tr key={student.id}>
+                  <td>{student.admissionNo}</td>
                 <td>{student.studentName}</td>
                 <td>{student.class}</td>
-                <td>{student.admissionNo}</td>
+                <td>{new Date(student.dateOfBirth).toLocaleDateString()}</td>
                 <td>{student.parentName}</td>
+                <td>{student.contactNo}</td>
                 <td>{student.place}</td>
-                <td>{new Date(student.joiningDate).toLocaleDateString()}</td>
+                <td>{new Date(student.dateOfJoining).toLocaleDateString()}</td>
               </tr>
             ))}
           </tbody>
