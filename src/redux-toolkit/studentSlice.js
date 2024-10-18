@@ -32,19 +32,22 @@ export const addStudent = createAsyncThunk('students/addStudent', async (student
   }
 });
 
-export const updateStudent = createAsyncThunk('students/updateStudent', async ({ id, studentData }, { rejectWithValue }) => {
-  try {
-    const token = localStorage.getItem('token');
-    const response = await axios.put(`${API_URL}/student/${id}`, studentData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data; // Return the updated student data
-  } catch (error) {
-    return rejectWithValue(error.response.data.message);
+export const updateStudent = createAsyncThunk(
+  'students/updateStudent',
+  async ({ id, studentData }, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.put(`${API_URL}/student/${id}`, studentData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data; // Return the updated student data
+    } catch (error) {
+      return rejectWithValue(error.response.data.message);
+    }
   }
-});
+);
 
 export const deleteStudent = createAsyncThunk('students/deleteStudent', async (id, { rejectWithValue }) => {
   try {

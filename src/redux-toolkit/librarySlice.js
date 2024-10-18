@@ -9,13 +9,16 @@ const initialState = {
 };
 
 // Thunks for asynchronous operations
-
-
-export const fetchLibraryHistory  = createAsyncThunk( 'library/fetchLibraryHistory', async () => {
-    const response = await axios.get('http://localhost:8000/api/v1/library/all'); // Adjust the URL
-    console.log('Fetched Fees Response:', response.data); // Log the response data
-    return response.data; // Assuming response.data contains an array of fees with populated student details
-});
+export const fetchLibraryHistory = createAsyncThunk(
+  'library/fetchLibraryHistory',
+  async () => {
+    const response = await axios.get('http://localhost:8000/api/v1/library/all', {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }, // Include the token
+    });
+    console.log('Fetched Library Response:', response.data); // Log the response data
+    return response.data; // Assuming response.data contains the library history
+  }
+);
 
 export const addLibraryRecord = createAsyncThunk(
   'library/addLibraryRecord',
@@ -24,7 +27,7 @@ export const addLibraryRecord = createAsyncThunk(
       const response = await axios.post('http://localhost:8000/api/v1/library', newRecord, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
-      return response.data.newLibraryHistory; // Make sure to return the right data
+      return response.data.newLibraryHistory; // Ensure correct data is returned
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data || 'Failed to add library record');
     }

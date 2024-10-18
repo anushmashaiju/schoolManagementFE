@@ -11,6 +11,7 @@ function LibraryList() {
   const navigate = useNavigate();
 
   const { bookHistory, loading, error } = useSelector((state) => state.library);
+  const user = useSelector((state) => state.auth.user); // Get user info from auth state
 
   // Local state to track the row being edited
   const [editingRecordId, setEditingRecordId] = useState(null);
@@ -19,12 +20,6 @@ function LibraryList() {
   useEffect(() => {
     dispatch(fetchLibraryHistory());
   }, [dispatch]);
-
-  const handleDelete = (id) => {
-    if (window.confirm('Are you sure you want to delete this record?')) {
-      dispatch(deleteLibraryRecord(id));
-    }
-  };
 
   // Start editing a specific row
   const handleEdit = (book) => {
@@ -48,6 +43,12 @@ function LibraryList() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEditedRecord((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleDelete = (id) => {
+    if (window.confirm('Are you sure you want to delete this record?')) {
+      dispatch(deleteLibraryRecord(id));
+    }
   };
 
   return (
@@ -151,14 +152,16 @@ function LibraryList() {
                         <FaSave />
                       </button>
                     ) : (
-                      <>
-                        <button className="action-button edit-button" onClick={() => handleEdit(book)}>
-                          <FaEdit />
-                        </button>
-                        <button className="action-button delete-button" onClick={() => handleDelete(book._id)}>
-                          <FaTrash />
-                        </button>
-                      </>
+                      user?.role === 'admin' || user?.role === 'librarian' ? ( // Check if user is admin or librarian
+                        <>
+                          <button className="action-button edit-button" onClick={() => handleEdit(book)}>
+                            <FaEdit />
+                          </button>
+                          <button className="action-button delete-button" onClick={() => handleDelete(book._id)}>
+                            <FaTrash />
+                          </button>
+                        </>
+                      ) : null // No actions for non-admin/librarian
                     )}
                   </td>
                 </tr>

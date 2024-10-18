@@ -3,9 +3,13 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { addStudent } from '../../redux-toolkit/studentSlice'; // Import the addStudent action
 import './StudentsForm.css';
+import { useNavigate } from 'react-router-dom';
 
 function StudentsForm() {
   const dispatch = useDispatch();
+  const navigate = useNavigate(); // Initialize navigate
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
   const user = useSelector((state) => state.auth.user); // Get user info
   const [studentDetails, setStudentDetails] = useState({
     admissionNo: '',
@@ -31,7 +35,12 @@ function StudentsForm() {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     dispatch(addStudent(studentDetails)); // Dispatch addStudent action
-    // Reset the form after submission
+   //  Show success message and reset form
+      setIsSubmitted(true);
+      setTimeout(() => {
+        navigate('/students'); // After 1 second, navigate to the fee history page
+      }, 1000);
+
     setStudentDetails({
       admissionNo: '',
       name: '',
@@ -43,6 +52,7 @@ function StudentsForm() {
       dateOfJoining: ''
     });
   };
+
   if (user?.role !== 'admin') {
     return <p>You do not have permission to add students.</p>; // Show permission message
   }
@@ -135,6 +145,8 @@ function StudentsForm() {
           </div>
           <button type="submit">Add Student</button>
         </form>
+         {/* Success message */}
+         {isSubmitted && <div className="success-message">Book added successfully!</div>}
       </div>
     </div>
   );
