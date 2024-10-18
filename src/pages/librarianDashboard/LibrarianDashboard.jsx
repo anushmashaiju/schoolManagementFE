@@ -15,7 +15,7 @@ const LibrarianDashboard = () => {
         <h1>Librarian Dashboard</h1>
         <div className="nav-buttons">
           <button onClick={() =>navigate('/students')}>Students Details</button>
-          <button onClick={() =>navigate('/fees')}>Fees History</button>
+          <button onClick={() =>navigate('/library')}>Library History</button>
           <button className="logout" onClick={handleLogout}>
             Logout
           </button>

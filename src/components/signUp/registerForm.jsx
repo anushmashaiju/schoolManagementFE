@@ -1,44 +1,44 @@
-import  { useState } from 'react';
-import { useNavigate } from 'react-router-dom';  // Add useNavigate for navigation
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { registerUser } from '../../redux-toolkit/authSlice';
 import './signUp.css';
 
 const RegisterForm = ({ setBoxName }) => {
-  const [schoolName, setSchoolName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const navigate = useNavigate();  // Use navigate for programmatic navigation
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const { isLoading, error } = useSelector((state) => state.auth);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (password !== confirmPassword) {
       alert("Passwords don't match");
       return;
     }
-
-    // Assume registration is successful
-    console.log("Shool name:", schoolName);
-    console.log("Email:", email);
-    console.log("Password:", password);
-    console.log("Confirm Password:", confirmPassword);
-
-    // After registration, redirect the user to login or auto-login
-    navigate('/');  // Redirect to login page after successful registration
+  
+    try {
+      const resultAction = await dispatch(registerUser({ email, password })).unwrap();
+      console.log(resultAction);
+  
+      // Navigate to login or dashboard based on role
+      navigate('/');
+    } catch (err) {
+      console.error("Registration error:", err);
+      alert("Registration failed: " + err);
+    }
   };
-
+  
   return (
     <form className="form-container" onSubmit={handleSubmit}>
       <h2>Register</h2>
 
-      <input 
-        type="text" 
-        name="name" 
-        placeholder="School name" 
-        value={schoolName} 
-        onChange={(e) => setSchoolName(e.target.value)} 
-        required 
-      />
+      {error && <p className="error-message">{error}</p>} {/* Display error if any */}
+
       <input 
         type="email" 
         name="email" 
@@ -66,12 +66,14 @@ const RegisterForm = ({ setBoxName }) => {
         required 
       />
 
-      <button type="submit">Register</button>
+      <button type="submit" disabled={isLoading}>
+        {isLoading ? 'Registering...' : 'Register'}
+      </button>
 
       <p>
         Already have an account? 
         <span onClick={() => setBoxName('login')} style={{ cursor: 'pointer', color: 'blue' }}> 
-          <i> Login</i>
+          <i>Login</i>
         </span>
       </p>
     </form>

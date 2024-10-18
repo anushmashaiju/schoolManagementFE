@@ -1,39 +1,49 @@
-
-
 /* Form Card Styles */
 .library-form-card {
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 8px;
-    background-color:#5f6164;
+    background-color: #5f6164;
     max-width: 600px;
     margin: 50px auto; /* Center the form */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
 }
 
-.library-form-card h3{
+.library-form-card h3 {
     text-align: center;
     margin-bottom: 20px;
+    color: #ffffff; /* Change heading color */
 }
 
 .library-form-card form {
     display: grid;
     grid-template-columns: 1fr 1fr; /* Two equal columns */
     gap: 15px; /* Gap between columns and rows */
-  }
-  
-  .library-form-card form div {
-    display: flex;
-    flex-direction: column;
-  }
-/* Form Styles */
-.library-form-card label {
-    margin-bottom: 5px;
 }
 
-.library-form-card input {
+/* Form Fields */
+.library-form-card form div {
+    display: flex;
+    flex-direction: column;
+}
+
+.library-form-card label {
+    margin-bottom: 5px;
+    color: #ffffff; /* Change label color */
+}
+
+.library-form-card input,
+.library-form-card select {
     padding: 10px;
     border-radius: 4px;
     border: 1px solid #ccc;
+    transition: border-color 0.3s; /* Smooth transition for focus effect */
+}
+
+.library-form-card input:focus,
+.library-form-card select:focus {
+    border-color: #007bff; /* Change border color on focus */
+    outline: none; /* Remove default outline */
 }
 
 /* Button Styles */
@@ -46,8 +56,20 @@
     border-radius: 5px;
     cursor: pointer;
     margin-top: 10px;
+    transition: background-color 0.3s; /* Smooth transition for button hover */
+    font-size: 16px; /* Increase font size */
 }
 
 .library-form-card button:hover {
-    background-color: #45a049; /* Darker green on hover */
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+.success-message {
+    background-color: #28a745; /* Green background for success message */
+    color: white;
+    text-align: center;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    transition: opacity 0.5s; /* Smooth transition for message visibility */
 }

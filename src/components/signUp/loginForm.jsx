@@ -1,40 +1,45 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import './signUp.css';  // Import the updated CSS file
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { loginUser } from '../../redux-toolkit/authSlice';
+import './signUp.css';
 
 const LoginForm = ({ setBoxName }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate();  // Use navigate for programmatic navigation
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  // Extract loading and error states from Redux store
+  const { isLoading, error, user } = useSelector((state) => state.auth);
+  const role = user?.role; // Get the user role from the user object
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Simulate role-based navigation (you should fetch this info from a backend)
-    const userRole = getUserRole(email); // A function to fetch role based on email
-
-    if (userRole === 'Admin') {
-      navigate('/admin');  // Navigate to Admin Dashboard
-    } else if (userRole === 'OfficeStaff') {
-      navigate('/staff');  // Navigate to Office Staff Dashboard
-    } else if (userRole === 'Librarian') {
-      navigate('/librarian');  // Navigate to Librarian Dashboard
-    } else {
-      alert('Invalid credentials or role');
-    }
-  };
-
-  const getUserRole = (email) => {
-    // Mockup role selection based on email, replace with real logic
-    if (email === 'admin@school.com') return 'Admin';
-    if (email === 'staff@school.com') return 'OfficeStaff';
-    if (email === 'librarian@school.com') return 'Librarian';
-    return null;
+    
+    // Dispatch the loginUser action
+    dispatch(loginUser({ email, password }))
+      .unwrap()
+      .then(() => {
+        // Navigate based on the user's role after login
+        if (role === "admin") {
+          navigate('/admin');
+        } else if (role === "staff") {
+          navigate('/staff');
+        } else if (role === "librarian") {
+          navigate('/librarian');
+        } else {
+          alert('Invalid role detected');
+        }
+      })
+      .catch((error) => alert(error));
   };
 
   return (
     <form className="form-container" onSubmit={handleSubmit}>
       <h2>Login</h2>
+
+      {error && <p className="error-message">{error}</p>} {/* Display error if any */}
 
       <input 
         type="email" 
@@ -54,11 +59,13 @@ const LoginForm = ({ setBoxName }) => {
         required 
       />
 
-      <button type="submit">Login</button>
+      <button type="submit" disabled={isLoading}> {/* Disable button while loading */}
+        {isLoading ? 'Logging in...' : 'Login'}
+      </button>
 
       <p>
         Don't have an account? 
-        <span onClick={() => setBoxName('signup')}> 
+        <span onClick={() => setBoxName('signup')}>
           <i> Sign Up</i>
         </span>
       </p>

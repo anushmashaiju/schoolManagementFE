@@ -1,39 +1,47 @@
-
-
 /* Form Card Styles */
 .fee-form-card {
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 8px;
-    background-color:#5f6164;
+    background-color: #5f6164;
     max-width: 600px;
     margin: 50px auto; /* Center the form */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: #fff; /* White text color */
 }
 
-.fee-form-card h3{
+.fee-form-card h3 {
     text-align: center;
     margin-bottom: 20px;
+    color: #fff; /* White heading */
 }
 
 .fee-form-card form {
     display: grid;
     grid-template-columns: 1fr 1fr; /* Two equal columns */
     gap: 15px; /* Gap between columns and rows */
-  }
-  
-  .fee-form-card form div {
-    display: flex;
-    flex-direction: column;
-  }
-/* Form Styles */
-.fee-form-card label {
-    margin-bottom: 5px;
 }
 
-.fee-form-card input {
+.fee-form-card form div {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Form Label Styles */
+.fee-form-card label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #fff; /* White label */
+}
+
+/* Input Field Styles */
+.fee-form-card input,
+.fee-form-card select {
     padding: 10px;
     border-radius: 4px;
     border: 1px solid #ccc;
+    background-color: #fff; /* White input field */
+    color: #333; /* Dark text inside the input */
 }
 
 /* Button Styles */
@@ -46,8 +54,16 @@
     border-radius: 5px;
     cursor: pointer;
     margin-top: 10px;
+    transition: background-color 0.3s ease; /* Smooth transition */
 }
 
 .fee-form-card button:hover {
     background-color: #45a049; /* Darker green on hover */
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .fee-form-card form {
+        grid-template-columns: 1fr; /* Single column layout for small screens */
+    }
 }

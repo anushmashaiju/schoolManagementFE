@@ -20,4 +20,37 @@
 
 .fees-table th {
     background-color: #5f6164; /* Light gray background for header */
+    color: #fff; /* White text for header */
+}
+
+/* Action Button Styles */
+.action-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    margin: 0 5px;
+    font-size: 1.2rem; /* Increase icon size */
+    transition: transform 0.2s ease, opacity 0.2s ease; /* Smooth hover effect */
+}
+
+.action-button:hover {
+    transform: scale(1.2); /* Slight zoom effect on hover */
+    opacity: 0.8; /* Slightly fade on hover */
+}
+
+.edit-button {
+    color: #4caf50; /* Green color for edit */
+}
+
+.delete-button {
+    color: #f44336; /* Red color for delete */
+}
+
+.delete-button:hover {
+    color: #d32f2f; /* Darker red on hover for delete */
+}
+
+.edit-button:hover {
+    color: #388e3c; /* Darker green on hover for edit */
 }

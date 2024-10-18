@@ -1,26 +1,103 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { addLibraryRecord } from '../../redux-toolkit/librarySlice'; // Correct action import
+import axios from 'axios'; // Import axios for API requests
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
 import './LibraryForm.css';
 
 function LibraryForm() {
-    const [bookHistory, setBookHistory] = useState([
-        {
-            id: 1, studentName: 'John Doe', class: '10th', admissionNo: 'A101',
-            bookId: 'B001', bookName: 'To Kill a Mockingbird', authorName: 'Harper Lee',
-            borrowDate: '2024-09-01', returnDate: '2024-09-15', status: 'Returned'
-        },
-        {
-            id: 2, studentName: 'Jane Smith', class: '11th', admissionNo: 'A102',
-            bookId: 'B002', bookName: '1984', authorName: 'George Orwell',
-            borrowDate: '2024-09-10', returnDate: '2024-09-25', status: 'Borrowed'
-        },
-        {
-            id: 3, studentName: 'Michael Johnson', class: '12th', admissionNo: 'A103',
-            bookId: 'B003', bookName: 'The Great Gatsby', authorName: 'F. Scott Fitzgerald',
-            borrowDate: '2024-09-12', returnDate: '2024-09-26', status: 'Borrowed'
-        },
-    ]);
+  const [newBook, setNewBook] = useState({
+    admissionNo: '',
+    studentName: '',
+    class: '',
+    bookId: '',
+    bookName: '',
+    authorName: '',
+    borrowDate: '',
+    returnDate: '',
+  });
 
-    const [newBook, setNewBook] = useState({
+  const [isSubmitted, setIsSubmitted] = useState(false); // State to manage form submission success
+  const dispatch = useDispatch();
+  const navigate = useNavigate(); // Initialize navigate
+
+  // Fetch student data based on admission number
+  const fetchStudentData = async (admissionNo) => {
+    try {
+      const response = await axios.get(`http://localhost:8000/api/v1/student/admission/${admissionNo}`);
+      if (response.data) {
+        setNewBook((prev) => ({
+          ...prev,
+          studentName: response.data.name,
+          class: response.data.class,
+        }));
+      }
+    } catch (error) {
+      console.error('Error fetching student data:', error);
+      setNewBook((prev) => ({
+        ...prev,
+        studentName: '',
+        class: '',
+      }));
+    }
+  };
+
+  // Handle input changes for all form fields
+  const handleBookChange = (e) => {
+    const { name, value } = e.target;
+    setNewBook((prev) => ({ ...prev, [name]: value }));
+
+    // Fetch student data when admission number changes
+    if (name === 'admissionNo' && value) {
+      fetchStudentData(value);
+    }
+  };
+
+  // Handle form submission
+  const handleBookSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      // Fetch student details based on admission number
+      const response = await axios.get(`http://localhost:8000/api/v1/student/admission/${newBook.admissionNo}`);
+      const student = response.data; // Ensure we have the correct student data
+
+      if (!student._id) {
+        throw new Error('Student not found');
+      }
+
+      // Determine status based on return date
+      const status = newBook.returnDate ? 'Returned' : 'Not Returned';
+
+      // Create new book entry object with student details
+      const newBookEntry = {
+        student: student._id, // Pass the student's ObjectId
+        bookId: newBook.bookId,
+        bookName: newBook.bookName,
+        authorName: newBook.authorName,
+        borrowDate: newBook.borrowDate,
+        returnDate: newBook.returnDate,
+        status, // Set status based on return date
+
+        // Include student details in the record
+        studentDetails: {
+          name: student.name,
+          class: student.class,
+          admissionNo: student.admissionNo,
+        },
+      };
+
+      // Dispatch action to add the new book entry
+      dispatch(addLibraryRecord(newBookEntry));
+
+      // Show success message and reset form
+      setIsSubmitted(true);
+      setTimeout(() => {
+        navigate('/library'); // After 1 second, navigate to the fee history page
+      }, 1000);
+
+      // Reset the form fields after submission
+      setNewBook({
         admissionNo: '',
         studentName: '',
         class: '',
@@ -28,137 +105,109 @@ function LibraryForm() {
         bookName: '',
         authorName: '',
         borrowDate: '',
-        returnDate: ''
-    });
+        returnDate: '',
+      });
 
-    const handleBookChange = (e) => {
-        const { name, value } = e.target;
-        setNewBook((prev) => ({ ...prev, [name]: value }));
-    };
+    } catch (error) {
+      console.error('Error submitting book form:', error);
+    }
+  };
 
-    const handleBookSubmit = (e) => {
-        e.preventDefault();
-        const today = new Date();
-        const returnDate = new Date(newBook.returnDate);
-        const status = returnDate > today ? 'Borrowed' : 'Returned';
+  return (
+    <div>
+      {/* Add Book Details Form */}
+      <div className="library-form-card">
+        <h3>Add Book Details</h3>
 
-        const newBookEntry = {
-            id: bookHistory.length + 1,
-            admissionNo: newBook.admissionNo,
-            studentName: newBook.studentName,
-            class: newBook.class,
-            bookId: newBook.bookId,
-            bookName: newBook.bookName,
-            authorName: newBook.authorName,
-            borrowDate: newBook.borrowDate,
-            returnDate: newBook.returnDate,
-            status: status,
-        };
-
-        setBookHistory((prev) => [...prev, newBookEntry]);
-        setNewBook({
-            admissionNo: '',
-            studentName: '',
-            class: '',
-            bookId: '',
-            bookName: '',
-            authorName: '',
-            borrowDate: '',
-            returnDate: ''
-        }); // Reset form
-    };
-
-    return (
-        <div>
-            {/* Add Details Form */}
-            <div className="library-form-card">
-                <h3>Add Book Details</h3>
-                <form onSubmit={handleBookSubmit}>
-                    <div>
-                        <label>Admission No:</label>
-                        <input
-                            type="text"
-                            name="admissionNo"
-                            value={newBook.admissionNo}
-                            onChange={handleBookChange}
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label>Name of Student:</label>
-                        <input
-                            type="text"
-                            name="studentName"
-                            value={newBook.studentName}
-                            onChange={handleBookChange}
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label>Class:</label>
-                        <input
-                            type="text"
-                            name="class"
-                            value={newBook.class}
-                            onChange={handleBookChange}
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label>Book Id:</label>
-                        <input
-                            type="text"
-                            name="bookId"
-                            value={newBook.bookId}
-                            onChange={handleBookChange}
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label>Book Name:</label>
-                        <input
-                            type="text"
-                            name="bookName"
-                            value={newBook.bookName}
-                            onChange={handleBookChange}
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label>Author Name:</label>
-                        <input
-                            type="text"
-                            name="authorName"
-                            value={newBook.authorName}
-                            onChange={handleBookChange}
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label>Borrow Date:</label>
-                        <input
-                            type="date"
-                            name="borrowDate"
-                            value={newBook.borrowDate}
-                            onChange={handleBookChange}
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label>Return Date:</label>
-                        <input
-                            type="date"
-                            name="returnDate"
-                            value={newBook.returnDate}
-                            onChange={handleBookChange}
-                            required
-                        />
-                    </div>
-                    <button type="submit">Submit</button>
-                </form>
-            </div>
-        </div>
-    );
+        <form onSubmit={handleBookSubmit}>
+          <div>
+            <label>Admission No:</label>
+            <input
+              type="text"
+              name="admissionNo"
+              value={newBook.admissionNo}
+              onChange={handleBookChange}
+              required
+            />
+          </div>
+          <div>
+            <label>Name of Student:</label>
+            <input
+              type="text"
+              name="studentName"
+              value={newBook.studentName}
+              onChange={handleBookChange}
+              readOnly
+              required
+            />
+          </div>
+          <div>
+            <label>Class:</label>
+            <input
+              type="text"
+              name="class"
+              value={newBook.class}
+              onChange={handleBookChange}
+              readOnly
+              required
+            />
+          </div>
+          <div>
+            <label>Book ID:</label>
+            <input
+              type="text"
+              name="bookId"
+              value={newBook.bookId}
+              onChange={handleBookChange}
+              required
+            />
+          </div>
+          <div>
+            <label>Book Name:</label>
+            <input
+              type="text"
+              name="bookName"
+              value={newBook.bookName}
+              onChange={handleBookChange}
+              required
+            />
+          </div>
+          <div>
+            <label>Author Name:</label>
+            <input
+              type="text"
+              name="authorName"
+              value={newBook.authorName}
+              onChange={handleBookChange}
+              required
+            />
+          </div>
+          <div>
+            <label>Borrow Date:</label>
+            <input
+              type="date"
+              name="borrowDate"
+              value={newBook.borrowDate}
+              onChange={handleBookChange}
+              required
+            />
+          </div>
+          <div>
+            <label>Return Date:</label>
+            <input
+              type="date"
+              name="returnDate"
+              value={newBook.returnDate}
+              onChange={handleBookChange} // Update status when return date changes
+            />
+          </div>
+          <button type="submit">Submit</button>
+        </form>
+        {/* Success message */}
+        {isSubmitted && <div className="success-message">Book added successfully!</div>}
+      </div>
+    </div>
+  );
 }
 
 export default LibraryForm;
