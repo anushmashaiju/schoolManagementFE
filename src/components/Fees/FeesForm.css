@@ -1,4 +1,3 @@
-/* Form Card Styles */
 .fee-form-card {
     padding: 20px;
     border: 1px solid #ccc;
@@ -58,7 +57,7 @@
 }
 
 .fee-form-card button:hover {
-    background-color: #45a049; /* Darker green on hover */
+    background-color: #0056b3; /* Darker green on hover */
 }
 
 /* Responsive Styles */

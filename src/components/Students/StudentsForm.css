@@ -1,7 +1,4 @@
-
-  /* Student table styles */
-  
-  .student-form-card {
+.student-form-card {
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -51,3 +48,9 @@
     background-color: #0056b3;
   }
   
+  /* Responsive Styles */
+@media (max-width: 768px) {
+  .student-form-card form {
+      grid-template-columns: 1fr; /* Single column layout for small screens */
+  }
+}

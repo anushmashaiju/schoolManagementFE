@@ -15,7 +15,13 @@ function LibraryList() {
 
   // Local state to track the row being edited
   const [editingRecordId, setEditingRecordId] = useState(null);
-  const [editedRecord, setEditedRecord] = useState({});
+  const [editedRecord, setEditedRecord] = useState({
+    bookId: '',
+    bookName: '',
+    authorName:'',
+    borrowDate: '',
+    returnDate:'',
+  });
 
   useEffect(() => {
     dispatch(fetchLibraryHistory());
@@ -60,9 +66,8 @@ function LibraryList() {
         <h2>Library History</h2>
 
         {loading && <p>Loading...</p>}
-        {error && <p className="error-message">Error: {error.message || JSON.stringify(error)}</p>}
-
-        {!loading && !error && Array.isArray(bookHistory) && bookHistory.length > 0 ? (
+        {error && <p className="error-message"> {error}</p>}
+          
           <table className="book-table">
             <thead>
               <tr>
@@ -79,7 +84,8 @@ function LibraryList() {
               </tr>
             </thead>
             <tbody>
-              {bookHistory.map((book) => (
+            {bookHistory.length > 0 ? (
+              bookHistory.map(book => (
                 <tr key={book._id}>
                   <td>{book.studentDetails?.admissionNo}</td>
                   <td>{book.studentDetails?.name}</td>
@@ -147,12 +153,15 @@ function LibraryList() {
                   </td>
                   <td>{book.status}</td>
                   <td>
+                  {(user?.role === 'admin' || user?.role === 'librarian' ) && ( // Check if user is admin or librarian
+                    
+                    <>
                     {editingRecordId === book._id ? (
                       <button className="action-button save-button" onClick={() => handleSave(book._id)}>
                         <FaSave />
                       </button>
                     ) : (
-                      user?.role === 'admin' || user?.role === 'librarian' ? ( // Check if user is admin or librarian
+                    
                         <>
                           <button className="action-button edit-button" onClick={() => handleEdit(book)}>
                             <FaEdit />
@@ -161,18 +170,21 @@ function LibraryList() {
                             <FaTrash />
                           </button>
                         </>
-                      ) : null // No actions for non-admin/librarian
+                      ) }
+                      </>
                     )}
                   </td>
                 </tr>
-              ))}
+                  ))
+                ):(
+                  <tr>
+              <td colSpan="8">No books history available.</td>
+            </tr>
+          )}
             </tbody>
           </table>
-        ) : (
-          <p>No book history available</p>
-        )}
       </div>
-    </div>
+      </div>
   );
 }
 

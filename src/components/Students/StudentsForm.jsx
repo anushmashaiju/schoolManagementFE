@@ -146,7 +146,7 @@ function StudentsForm() {
           <button type="submit">Add Student</button>
         </form>
          {/* Success message */}
-         {isSubmitted && <div className="success-message">Book added successfully!</div>}
+         {isSubmitted && <div className="success-message">Student added successfully!</div>}
       </div>
     </div>
   );

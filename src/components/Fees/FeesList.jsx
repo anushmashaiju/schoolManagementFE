@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { fetchFees, deleteFee, updateFeesHistory } from '../../redux-toolkit/feeSlice'; 
 import { useNavigate } from 'react-router-dom';
 import { IoChevronBackOutline } from 'react-icons/io5';
 import { FaEdit, FaTrash, FaSave } from 'react-icons/fa';
-import { fetchFees, deleteFee, updateFeesHistory } from '../../redux-toolkit/feeSlice'; 
 import './FeesList.css';
 
 function FeesList() {
@@ -55,8 +55,10 @@ function FeesList() {
         <IoChevronBackOutline />
       </button>
       <h2>Fees History</h2>
+
       {isLoading && <p>Loading...</p>}
       {error && <p className="error-message">{error}</p>}
+
       <table className="fees-table">
         <thead>
           <tr>
@@ -74,9 +76,9 @@ function FeesList() {
           {fees.length > 0 ? (
             fees.map(fee => (
               <tr key={fee._id}>
-                <td>{fee.studentDetails?.admissionNo || 'N/A'}</td>
-                <td>{fee.studentDetails?.name || 'N/A'}</td>
-                <td>{fee.studentDetails?.class || 'N/A'}</td>
+                <td>{fee.studentDetails?.admissionNo }</td>
+                <td>{fee.studentDetails?.name }</td>
+                <td>{fee.studentDetails?.class }</td>
                 <td>
                   {editingRecordId === fee._id ? (
                     <input

@@ -89,3 +89,14 @@ body{
 .back-button{
   font-size: 24px;
 }
+
+
+.success-message {
+  background-color: #28a745; /* Green background for success message */
+  color: white;
+  text-align: center;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  transition: opacity 0.5s; /* Smooth transition for message visibility */
+}

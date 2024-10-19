@@ -1,18 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-// Initial state
-const initialState = {
-  bookHistory: [],
-  loading: false,
-  error: null,
-};
+const API_URL = 'http://localhost:8000/api/v1';
 
 // Thunks for asynchronous operations
 export const fetchLibraryHistory = createAsyncThunk(
   'library/fetchLibraryHistory',
   async () => {
-    const response = await axios.get('http://localhost:8000/api/v1/library/all', {
+    const response = await axios.get(`${API_URL}/library/all`, {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }, // Include the token
     });
     console.log('Fetched Library Response:', response.data); // Log the response data
@@ -24,7 +19,7 @@ export const addLibraryRecord = createAsyncThunk(
   'library/addLibraryRecord',
   async (newRecord, thunkAPI) => {
     try {
-      const response = await axios.post('http://localhost:8000/api/v1/library', newRecord, {
+      const response = await axios.post(`${API_URL}/library`, newRecord, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
       return response.data.newLibraryHistory; // Ensure correct data is returned
@@ -38,7 +33,7 @@ export const updateLibraryRecord = createAsyncThunk(
   'library/updateLibraryRecord',
   async ({ id, updatedRecord }, thunkAPI) => {
     try {
-      const response = await axios.put(`http://localhost:8000/api/v1/library/${id}`, updatedRecord, {
+      const response = await axios.put(`${API_URL}/library/${id}`, updatedRecord, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
       return response.data;
@@ -50,22 +45,22 @@ export const updateLibraryRecord = createAsyncThunk(
 
 export const deleteLibraryRecord = createAsyncThunk(
   'library/deleteLibraryRecord',
-  async (id, thunkAPI) => {
-    try {
-      const response = await axios.delete(`http://localhost:8000/api/v1/library/${id}`, {
+  async (id) => {
+  await axios.delete(`${API_URL}/library/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
-      return response.data; // Return the deleted record ID
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response?.data || 'Failed to delete library record');
-    }
+      return id; // Return the deleted record ID
   }
 );
 
 // Slice
 const librarySlice = createSlice({
   name: 'library',
-  initialState,
+  initialState : {
+    bookHistory: [],
+    loading: false,
+    error: null,
+  },
   reducers: {},
   extraReducers: (builder) => {
     builder

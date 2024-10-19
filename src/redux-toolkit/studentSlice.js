@@ -49,31 +49,24 @@ export const updateStudent = createAsyncThunk(
   }
 );
 
-export const deleteStudent = createAsyncThunk('students/deleteStudent', async (id, { rejectWithValue }) => {
-  try {
-    const token = localStorage.getItem('token');
-    const response = await axios.delete(`${API_URL}/student/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+export const deleteStudent = createAsyncThunk('students/deleteStudent', async (id) => {
+ 
+  await axios.delete(`${API_URL}/student/${id}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}`},
+    
     });
-    return response.data; // Return the deleted student ID
-  } catch (error) {
-    return rejectWithValue(error.response.data.message);
-  }
+    return id; // Return the deleted student ID
 });
 
-// The initial state of the student slice
-const initialState = {
-  students: [],
-  isLoading: false,
-  error: null,
-};
 
 // Create the student slice
 const studentSlice = createSlice({
   name: 'students',
-  initialState,
+   initialState : {
+    students: [],
+    isLoading: false,
+    error: null,
+  },
   reducers: {},
   extraReducers: (builder) => {
     builder
@@ -105,7 +98,6 @@ const studentSlice = createSlice({
       })
       // Handle updating a student
       .addCase(updateStudent.fulfilled, (state, action) => {
-        state.isLoading = false;
         const index = state.students.findIndex(student => student._id === action.payload._id);
         if (index !== -1) {
           state.students[index] = action.payload; // Update the student
@@ -113,7 +105,6 @@ const studentSlice = createSlice({
       })
       // Handle deleting a student
       .addCase(deleteStudent.fulfilled, (state, action) => {
-        state.isLoading = false;
         state.students = state.students.filter(student => student._id !== action.payload); // Remove the deleted student
       });
   },

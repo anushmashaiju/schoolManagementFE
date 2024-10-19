@@ -1,9 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+const API_URL = 'http://localhost:8000/api/v1';
+
 // Async thunk for fetching fees
 export const fetchFees = createAsyncThunk('fees/fetchFees', async () => {
-    const response = await axios.get('http://localhost:8000/api/v1/fees/all', {
+    const response = await axios.get(`${API_URL}/fees/all`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }, // Include the token
     });
     console.log('Fetched Fees Response:', response.data); // Log the response data
@@ -14,7 +16,7 @@ export const fetchFees = createAsyncThunk('fees/fetchFees', async () => {
 export const addFee = createAsyncThunk('fees/addFee', async (feeEntry) => {
     try {
         console.log('Sending Fee Entry:', feeEntry); // Log to verify data
-        const response = await axios.post('http://localhost:8000/api/v1/fees', feeEntry, {
+        const response = await axios.post(`${API_URL}/fees`, feeEntry, {
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }, // Include the token
         });
         console.log('Response from server:', response.data); // Log the response
@@ -27,7 +29,7 @@ export const addFee = createAsyncThunk('fees/addFee', async (feeEntry) => {
 
 // Async thunk for deleting a fee
 export const deleteFee = createAsyncThunk('fees/deleteFee', async (id) => {
-    await axios.delete(`http://localhost:8000/api/v1/fees/${id}`, {
+    await axios.delete(`${API_URL}/fees/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }, // Include the token
     }); // Adjust the URL
     return id; // Return the id to delete from the state
@@ -35,7 +37,7 @@ export const deleteFee = createAsyncThunk('fees/deleteFee', async (id) => {
 
 // Async thunk for updating a fee
 export const updateFeesHistory = createAsyncThunk('fees/updateFeesHistory', async ({ id, updatedRecord }) => {
-    const response = await axios.put(`http://localhost:8000/api/v1/fees/${id}`, updatedRecord, {
+    const response = await axios.put(`${API_URL}/fees/${id}`, updatedRecord, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }, // Include the token
     }); // Correct URL for the PUT request
     return response.data; // Return the updated fee record
